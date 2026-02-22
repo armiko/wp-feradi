@@ -5,7 +5,7 @@ import Footer from '@/components/Footer';
 // Mengambil satu artikel berdasarkan slug
 async function getPost(slug) {
   // GANTI URL DI BAWAH DENGAN DOMAIN WORDPRESS ANDA
-  const res = await fetch(`https://domain-wordpress-anda.com/wp-json/wp/v2/posts?slug=${slug}&_embed`, {
+  const res = await fetch(`https://feradi.dahono.com/wp-json/wp/v2/posts?slug=${slug}&_embed`, {
     next: { revalidate: 3600 }
   });
   

@@ -4,7 +4,7 @@ import Link from 'next/link';
 async function getPosts() {
   try {
     // GANTI URL DI BAWAH DENGAN DOMAIN WORDPRESS ANDA
-    const res = await fetch('https://domain-wordpress-anda.com/wp-json/wp/v2/posts?_embed&per_page=3', {
+    const res = await fetch('https://feradi.dahono.com/wp-json/wp/v2/posts?_embed&per_page=3', {
       next: { revalidate: 3600 } // Update data cache setiap 1 jam
     });
     
