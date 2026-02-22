@@ -24,7 +24,7 @@ export default function Navbar() {
   return (
     <nav 
       className={`fixed w-full z-50 transition-all duration-300 ${
-        isScrolled ? 'glass-nav shadow-md' : 'bg-transparent'
+        isScrolled ? 'glass-nav shadow-md bg-white/90 backdrop-blur-md' : 'bg-transparent'
       }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -36,17 +36,21 @@ export default function Navbar() {
               <img 
                 src="/logo.png" 
                 alt="Feradi WPI Logo" 
-                className="h-8 lg:h-11 w-auto object-contain"
+                // LOGIKA CERDAS: brightness-0 invert akan mengubah logo hitam menjadi putih bersih saat belum di-scroll
+                className={`h-8 lg:h-11 w-auto object-contain transition-all duration-300 ${
+                  !isScrolled ? 'brightness-0 invert' : ''
+                }`}
               />
             </Link>
           </div>
 
           {/* Desktop Menu */}
           <div className="hidden lg:flex space-x-8 items-center">
-            <Link href="/#tentang" className="text-sm font-semibold text-gray-600 hover:text-primary-500 transition-colors">Tentang Kami</Link>
-            <Link href="/#spesialisasi" className="text-sm font-semibold text-gray-600 hover:text-primary-500 transition-colors">Spesialisasi</Link>
-            <Link href="/#layanan" className="text-sm font-semibold text-gray-600 hover:text-primary-500 transition-colors">Layanan</Link>
-            <Link href="/#pendekatan" className="text-sm font-semibold text-gray-600 hover:text-primary-500 transition-colors">Pendekatan</Link>
+            {/* Teks menu diubah jadi putih/terang saat belum di-scroll, dan abu-abu gelap saat di-scroll */}
+            <Link href="/#tentang" className={`text-sm font-semibold transition-colors ${isScrolled ? 'text-gray-600 hover:text-primary-500' : 'text-gray-200 hover:text-white'}`}>Tentang Kami</Link>
+            <Link href="/#spesialisasi" className={`text-sm font-semibold transition-colors ${isScrolled ? 'text-gray-600 hover:text-primary-500' : 'text-gray-200 hover:text-white'}`}>Spesialisasi</Link>
+            <Link href="/#layanan" className={`text-sm font-semibold transition-colors ${isScrolled ? 'text-gray-600 hover:text-primary-500' : 'text-gray-200 hover:text-white'}`}>Layanan</Link>
+            <Link href="/#pendekatan" className={`text-sm font-semibold transition-colors ${isScrolled ? 'text-gray-600 hover:text-primary-500' : 'text-gray-200 hover:text-white'}`}>Pendekatan</Link>
             <Link href="/#kontak" className="bg-primary-500 hover:bg-primary-600 text-white px-7 py-3 rounded-2xl text-sm font-bold transition shadow-lg shadow-primary-500/30 flex items-center gap-2">
               <i className="fa-regular fa-calendar-check text-lg"></i> Jadwalkan Konsultasi
             </Link>
@@ -56,7 +60,10 @@ export default function Navbar() {
           <div className="lg:hidden flex items-center">
             <button 
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} 
-              className="text-gray-600 hover:text-primary-500 focus:outline-none"
+              // Warna ikon menu (hamburger) juga disesuaikan
+              className={`focus:outline-none transition-colors ${
+                isScrolled ? 'text-gray-600 hover:text-primary-500' : 'text-gray-200 hover:text-white'
+              }`}
             >
               <i className={`fa-solid ${isMobileMenuOpen ? 'fa-xmark' : 'fa-bars'} text-2xl`}></i>
             </button>
