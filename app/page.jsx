@@ -4,7 +4,7 @@ import Link from 'next/link';
 async function getPosts() {
   try {
     const res = await fetch('https://feradi.dahono.com/wp-json/wp/v2/posts?_embed&per_page=3', {
-      next: { revalidate: 3600 } // Update data cache setiap 1 jam
+      next: { revalidate: 3600, tags: ['wordpress'] } // Menggunakan tags untuk auto-refresh
     });
     
     if (!res.ok) return [];
@@ -16,14 +16,12 @@ async function getPosts() {
 }
 
 export default async function Home() {
-  // Panggil fungsi getPosts
   const posts = await getPosts();
 
   return (
     <main>
       {/* Hero Section */}
       <section className="relative pt-20 pb-32 lg:pt-24 lg:pb-32 flex items-center min-h-[90vh] bg-navy-950 overflow-hidden">
-        {/* Abstract CSS Background */}
         <div className="absolute inset-0 z-0">
           <div className="absolute inset-0 bg-[linear-gradient(rgba(56,189,248,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(56,189,248,0.03)_1px,transparent_1px)] bg-[size:40px_40px]"></div>
           <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-primary-600/20 rounded-full filter blur-[100px] opacity-60 -translate-y-1/2 pointer-events-none"></div>
@@ -456,18 +454,21 @@ export default async function Home() {
           </div>
 
           {posts.length > 0 ? (
-            /* TAMBAHKAN TAG KOSONG INI DI SINI -> */ <>
+            <>
               
               <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                 {posts.map((post) => (
                   <div key={post.id} className="bg-white rounded-3xl overflow-hidden shadow-sm border border-gray-100 card-hover transition duration-300 flex flex-col">
-                    {post._embedded && post._embedded['wp:featuredmedia'] && (
+                    
+                    {/* LOGIKA GAMBAR CERDAS: Cloudinary Direct atau Cloudinary Fetch */}
+                    {(post.cloudinary_url || (post._embedded && post._embedded['wp:featuredmedia'] && post._embedded['wp:featuredmedia'][0]?.source_url)) && (
                       <img 
-                        src={post._embedded['wp:featuredmedia'][0].source_url} 
+                        src={post.cloudinary_url ? post.cloudinary_url : `https://res.cloudinary.com/dy3wbouns/image/fetch/f_auto,q_auto/${post._embedded['wp:featuredmedia'][0].source_url}`} 
                         alt={post.title.rendered} 
                         className="w-full h-48 object-cover"
                       />
                     )}
+
                     <div className="p-6 flex flex-col flex-grow">
                       <h3 className="text-xl font-bold text-navy-900 mb-3 line-clamp-2" dangerouslySetInnerHTML={{ __html: post.title.rendered }}></h3>
                       <div className="text-gray-500 text-sm font-light mb-4 line-clamp-3" dangerouslySetInnerHTML={{ __html: post.excerpt.rendered }}></div>

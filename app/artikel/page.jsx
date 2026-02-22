@@ -3,9 +3,8 @@ import Link from 'next/link';
 // Fungsi mengambil data DARI WordPress (mengambil lebih banyak artikel, misal 12)
 async function getAllPosts() {
   try {
-    // ⚠️ PENTING: GANTI URL DI BAWAH DENGAN DOMAIN WORDPRESS ANDA
     const res = await fetch('https://feradi.dahono.com/wp-json/wp/v2/posts?_embed&per_page=12', {
-      next: { revalidate: 3600 }
+      next: { revalidate: 3600, tags: ['wordpress'] } // Menggunakan tags untuk auto-refresh
     });
     
     if (!res.ok) return [];
@@ -38,13 +37,16 @@ export default async function AllArticlesPage() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {posts.map((post) => (
               <div key={post.id} className="bg-white rounded-3xl overflow-hidden shadow-sm border border-gray-100 card-hover transition duration-300 flex flex-col">
-                {post._embedded && post._embedded['wp:featuredmedia'] && (
+                
+                {/* LOGIKA GAMBAR CERDAS: Cloudinary Direct atau Cloudinary Fetch */}
+                {(post.cloudinary_url || (post._embedded && post._embedded['wp:featuredmedia'] && post._embedded['wp:featuredmedia'][0]?.source_url)) && (
                   <img 
-                    src={post._embedded['wp:featuredmedia'][0].source_url} 
+                    src={post.cloudinary_url ? post.cloudinary_url : `https://res.cloudinary.com/dy3wbouns/image/fetch/f_auto,q_auto/${post._embedded['wp:featuredmedia'][0].source_url}`} 
                     alt={post.title.rendered} 
                     className="w-full h-48 object-cover"
                   />
                 )}
+                
                 <div className="p-6 flex flex-col flex-grow">
                   <h3 className="text-xl font-bold text-navy-900 mb-3 line-clamp-2" dangerouslySetInnerHTML={{ __html: post.title.rendered }}></h3>
                   <div className="text-gray-500 text-sm font-light mb-4 line-clamp-3" dangerouslySetInnerHTML={{ __html: post.excerpt.rendered }}></div>

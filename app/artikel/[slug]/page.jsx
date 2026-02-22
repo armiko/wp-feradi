@@ -3,9 +3,8 @@ import Link from 'next/link';
 // Fungsi mengambil satu artikel berdasarkan slug
 async function getPost(slug) {
   try {
-    // ⚠️ PENTING: GANTI URL DI BAWAH DENGAN DOMAIN WORDPRESS ANDA
     const res = await fetch(`https://feradi.dahono.com/wp-json/wp/v2/posts?slug=${slug}&_embed`, {
-      next: { revalidate: 3600 }
+      next: { revalidate: 3600, tags: ['wordpress'] } // Menggunakan tags untuk auto-refresh
     });
     
     const posts = await res.json();
@@ -16,12 +15,8 @@ async function getPost(slug) {
   }
 }
 
-// Perhatikan parameter { params } di sini
 export default async function ArticlePage({ params }) {
-  // ✅ SOLUSI NEXT.JS TERBARU: Kita harus melakukan 'await' pada params terlebih dahulu
   const resolvedParams = await params;
-  
-  // Sekarang resolvedParams.slug sudah berisi teks judul yang benar (bukan undefined)
   const post = await getPost(resolvedParams.slug);
 
   if (!post) {
@@ -37,7 +32,6 @@ export default async function ArticlePage({ params }) {
     );
   }
 
-  // Format tanggal WordPress ke format Indonesia
   const date = new Date(post.date).toLocaleDateString('id-ID', {
     day: 'numeric', month: 'long', year: 'numeric'
   });
@@ -57,17 +51,17 @@ export default async function ArticlePage({ params }) {
             <span className="flex items-center gap-2"><i className="fa-regular fa-calendar"></i> {date}</span>
           </div>
 
-          {post._embedded && post._embedded['wp:featuredmedia'] && (
+          {/* LOGIKA GAMBAR CERDAS: Cloudinary Direct atau Cloudinary Fetch */}
+          {(post.cloudinary_url || (post._embedded && post._embedded['wp:featuredmedia'] && post._embedded['wp:featuredmedia'][0]?.source_url)) && (
             <div className="mb-10 rounded-2xl overflow-hidden shadow-md">
               <img 
-                src={post._embedded['wp:featuredmedia'][0].source_url} 
+                src={post.cloudinary_url ? post.cloudinary_url : `https://res.cloudinary.com/dy3wbouns/image/fetch/f_auto,q_auto/${post._embedded['wp:featuredmedia'][0].source_url}`} 
                 alt={post.title.rendered} 
                 className="w-full h-auto object-cover"
               />
             </div>
           )}
 
-          {/* Plugin @tailwindcss/typography (prose) memastikan konten HTML dari WP rapi */}
           <div 
             className="prose prose-lg prose-slate max-w-none prose-headings:font-heading prose-a:text-primary-600"
             dangerouslySetInnerHTML={{ __html: post.content.rendered }}
