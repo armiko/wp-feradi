@@ -488,8 +488,7 @@ export default async function Home() {
                 </Link>
               </div>
               {/* TOMBOL BERAKHIR DI SINI */}
-
-            /* TAMBAHKAN PENUTUP TAG KOSONG DI SINI */ </>
+              </>
           ) : (
             <p className="text-center text-gray-500 font-light">Belum ada artikel yang dipublikasikan saat ini.</p>
           )}
