@@ -3,7 +3,6 @@ import Link from 'next/link';
 // Fungsi mengambil data dari WordPress
 async function getPosts() {
   try {
-    // GANTI URL DI BAWAH DENGAN DOMAIN WORDPRESS ANDA
     const res = await fetch('https://feradi.dahono.com/wp-json/wp/v2/posts?_embed&per_page=3', {
       next: { revalidate: 3600 } // Update data cache setiap 1 jam
     });
@@ -457,28 +456,40 @@ export default async function Home() {
           </div>
 
           {posts.length > 0 ? (
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              {posts.map((post) => (
-                <div key={post.id} className="bg-white rounded-3xl overflow-hidden shadow-sm border border-gray-100 card-hover transition duration-300 flex flex-col">
-                  {post._embedded && post._embedded['wp:featuredmedia'] && (
-                    <img 
-                      src={post._embedded['wp:featuredmedia'][0].source_url} 
-                      alt={post.title.rendered} 
-                      className="w-full h-48 object-cover"
-                    />
-                  )}
-                  <div className="p-6 flex flex-col flex-grow">
-                    <h3 className="text-xl font-bold text-navy-900 mb-3 line-clamp-2" dangerouslySetInnerHTML={{ __html: post.title.rendered }}></h3>
-                    <div className="text-gray-500 text-sm font-light mb-4 line-clamp-3" dangerouslySetInnerHTML={{ __html: post.excerpt.rendered }}></div>
-                    <div className="mt-auto pt-4">
-                      <Link href={`/artikel/${post.slug}`} className="text-primary-600 font-bold hover:text-primary-700 flex items-center gap-2 transition">
-                        Baca Selengkapnya <i className="fa-solid fa-arrow-right text-sm"></i>
-                      </Link>
+            /* TAMBAHKAN TAG KOSONG INI DI SINI -> */ <>
+              
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                {posts.map((post) => (
+                  <div key={post.id} className="bg-white rounded-3xl overflow-hidden shadow-sm border border-gray-100 card-hover transition duration-300 flex flex-col">
+                    {post._embedded && post._embedded['wp:featuredmedia'] && (
+                      <img 
+                        src={post._embedded['wp:featuredmedia'][0].source_url} 
+                        alt={post.title.rendered} 
+                        className="w-full h-48 object-cover"
+                      />
+                    )}
+                    <div className="p-6 flex flex-col flex-grow">
+                      <h3 className="text-xl font-bold text-navy-900 mb-3 line-clamp-2" dangerouslySetInnerHTML={{ __html: post.title.rendered }}></h3>
+                      <div className="text-gray-500 text-sm font-light mb-4 line-clamp-3" dangerouslySetInnerHTML={{ __html: post.excerpt.rendered }}></div>
+                      <div className="mt-auto pt-4">
+                        <Link href={`/artikel/${post.slug}`} className="text-primary-600 font-bold hover:text-primary-700 flex items-center gap-2 transition">
+                          Baca Selengkapnya <i className="fa-solid fa-arrow-right text-sm"></i>
+                        </Link>
+                      </div>
                     </div>
                   </div>
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
+              
+              {/* TOMBOL LIHAT SEMUA ARTIKEL MULAI DARI SINI */}
+              <div className="mt-12 text-center">
+                <Link href="/artikel" className="inline-flex items-center gap-2 bg-white border-2 border-primary-500 text-primary-600 hover:bg-primary-500 hover:text-white px-8 py-3.5 rounded-full font-bold transition-all shadow-sm hover:shadow-primary-500/30">
+                  Lihat Semua Artikel <i className="fa-solid fa-arrow-right"></i>
+                </Link>
+              </div>
+              {/* TOMBOL BERAKHIR DI SINI */}
+
+            /* TAMBAHKAN PENUTUP TAG KOSONG DI SINI */ </>
           ) : (
             <p className="text-center text-gray-500 font-light">Belum ada artikel yang dipublikasikan saat ini.</p>
           )}

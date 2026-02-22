@@ -18,7 +18,7 @@ export default function Footer() {
             <div className="lg:col-span-1">
               <div className="flex items-center mb-6">
                 <img 
-                  src="https://cdn.discordapp.com/attachments/1335835921232433234/1474955217438248990/8056bac1-1c36-4542-a7d9-bc7e96fd5254_removalai_preview.png" 
+                  src="/logo.png" 
                   alt="Feradi WPI Logo" 
                   className="h-10 md:h-12 w-auto object-contain brightness-0 invert opacity-90"
                 />
