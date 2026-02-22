@@ -7,7 +7,7 @@ export async function GET(request) {
 
   // Pastikan token cocok agar tidak sembarang orang bisa me-refresh web Anda
   // Ganti 'FERADI_RAHASIA_123' dengan kata sandi acak Anda sendiri
-  if (secret !== 'poweredbydahono.com') {
+  if (secret !== 'FERADI_RAHASIA_123') {
     return NextResponse.json({ message: 'Token tidak valid' }, { status: 401 });
   }
 
