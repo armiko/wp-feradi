@@ -29,7 +29,7 @@ export default async function ArticlePage({ params }) {
       <div className="min-h-screen flex items-center justify-center bg-slate-50">
         <div className="text-center">
           <h1 className="text-2xl font-bold text-navy-900 mb-4">Artikel tidak ditemukan</h1>
-          <Link href="/#artikel" className="text-primary-600 hover:underline">
+          <Link href="/artikel" className="text-primary-600 hover:underline">
             Kembali ke Beranda
           </Link>
         </div>
@@ -46,7 +46,7 @@ export default async function ArticlePage({ params }) {
     <main className="pt-24 pb-32 bg-slate-50 min-h-screen">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 mt-12">
         
-        <Link href="/#artikel" className="inline-flex items-center gap-2 text-primary-600 font-semibold mb-8 hover:text-navy-900 transition">
+        <Link href="/artikel" className="inline-flex items-center gap-2 text-primary-600 font-semibold mb-8 hover:text-navy-900 transition">
           <i className="fa-solid fa-arrow-left"></i> Kembali ke Beranda
         </Link>
 
